@@ -1,10 +1,15 @@
 async function InsertOneDocument(collection , document){
     try{
+
     const result = await collection.insertOne(document)
-    console.log("Document Inserted" , result)
+    if(result?.acknowledged) console.log("Document Inserted" , result)
+    else console.log("Error while inserting Document" , result)
+
     return result
+
     }
     catch(err){
+
         console.log('errror While inserting doc' , err)
     }
     
@@ -12,9 +17,12 @@ async function InsertOneDocument(collection , document){
 
 async function InsertMultiDocument(collection , document){
     try{
+
     const result = await collection.insertMany(document)
-    console.log("Document Inserted Many" , result)
+    if(result?.acknowledged) console.log("Document Inserted Many" , result)
+    else console.log("Error while inserting Document Many" , result)
     return result
+
     }
     catch(err){
         console.log('errror While inserting doc' , err)

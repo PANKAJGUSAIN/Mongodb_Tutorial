@@ -55,9 +55,9 @@ const connectToDatabase = async () =>{
 
 const main = async () =>{
     try{
-        await connectToDatabase();
-        const databaselist = await client.db().admin().listDatabases()
-        collection = client.db(dbname).collection('socketsession')
+        await connectToDatabase(); // connect to database
+        const databaselist = await client.db().admin().listDatabases() // list of database
+        collection = client.db(dbname).collection('socketsession')  // connect to the collection "socketsession" from db "whatsappclonse databse" to perform actions  
         databaselist.databases.forEach(db=>console.log(`==${db.name}`))
         console.log(`Connected to the ${dbname} database `)
     }
