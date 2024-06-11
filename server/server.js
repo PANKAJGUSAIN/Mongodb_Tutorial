@@ -40,6 +40,7 @@ const client = new MongoClient(uri);
 
 
 const dbname = 'WhatsappClone'
+var collection = null
 
 const connectToDatabase = async () =>{
     try{
@@ -56,14 +57,16 @@ const main = async () =>{
     try{
         await connectToDatabase();
         const databaselist = await client.db().admin().listDatabases()
+        collection = client.db(dbname).collection('socketsession')
         databaselist.databases.forEach(db=>console.log(`==${db.name}`))
         console.log(`Connected to the ${dbname} database `)
     }
     catch(err){
         console.error(`Error connecting to the database main:${err}`)
-    }finally{
-        await client.close();
     }
+    // finally{
+    //     await client.close();
+    // }
 }
 
 main();
@@ -71,7 +74,8 @@ main();
 
 
 // initalizing socket
-const { Server }  = require('socket.io')
+const { Server }  = require('socket.io');
+const { InsertOneDocument, InsertMultiDocument } = require("./Insertion");
 const io = new Server(server,{
     cors :{
         origin:'http://localhost:3000',
@@ -81,8 +85,11 @@ const io = new Server(server,{
 
 //listening to socket event
 
-io.on("connection" , (socket)=>{ 
+io.on("connection" , async (socket)=>{ 
     console.log(`user connected - ${socket.id}`)
+    const result = await InsertOneDocument(collection , {user_socket_id : socket.id } )
+    const resultformany = await InsertMultiDocument(collection , [{user_socket_id : 123 },{user_socket_id : 1234 }] )
+
 
     // joinig a room
 
