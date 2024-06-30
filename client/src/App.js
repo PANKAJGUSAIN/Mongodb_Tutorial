@@ -9,6 +9,7 @@ function App() {
   const [RooMmessage , setRooMmessage] = React.useState("")
   const [messageRecieved , setMessageRecieved] = React.useState("")
   const [RecieveNotification , setRecieveNotification] = React.useState("")
+  const [sessionDetails , setsessionDetails] = React.useState([])
   const sendMessage = () =>{
     console.log('send it' , message)
     socket.emit("message" ,{roomid:RooMmessage ,message : message} )
@@ -30,6 +31,11 @@ function App() {
     socket.on('user_joined' , (data)=>{
       setRecieveNotification(data.message)
     })
+
+    socket.on('all_session' , (data)=>{
+      console.log(data)
+      setsessionDetails(data)
+    })
   },[])
 
   return (
@@ -40,6 +46,14 @@ function App() {
     <button onClick={()=>{sendMessage()}}>Send</button>
     <h1>USER JOINED:</h1><p style={{color:'red'}}>{RecieveNotification}</p>
     <h1>Message:</h1><h1> {messageRecieved}</h1>
+
+    <div>User Session Details</div>
+    {sessionDetails?.map(item =>(
+      <p>
+      <span>{item._id} - </span>
+      <span>{item.user_socket_id}</span>
+      </p>
+    ))}
     </div>
   );
 }

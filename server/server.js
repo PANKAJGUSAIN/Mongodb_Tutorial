@@ -76,6 +76,7 @@ main();
 // initalizing socket
 const { Server }  = require('socket.io');
 const { InsertOneDocument, InsertMultiDocument } = require("./Insertion");
+const { FindDocument ,FindSpecficDocuments} = require("./Find");
 const io = new Server(server,{
     cors :{
         origin:'http://localhost:3000',
@@ -87,9 +88,12 @@ const io = new Server(server,{
 
 io.on("connection" , async (socket)=>{ 
     console.log(`user connected - ${socket.id}`)
-    const result = await InsertOneDocument(collection , {user_socket_id : socket.id } )
-    const resultformany = await InsertMultiDocument(collection , [{user_socket_id : 123 },{user_socket_id : 1234 }] )
+    // const result = await InsertOneDocument(collection , {user_socket_id : socket.id } )
+    // const resultformany = await InsertMultiDocument(collection , [{user_socket_id : 123 },{user_socket_id : 1234 }] )
+    // const find = await FindDocument(collection , socket)
+       const findspecific = await FindSpecficDocuments(collection , socket)
 
+    
 
     // joinig a room
 
